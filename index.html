@@ -5,32 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>বুরো কৃষি বাজার</title>
   <style>
-    /* Reset Margins & Body Setup */
+    /* Global Reset & Centering */
     html, body {
       margin: 0;
       padding: 0;
-      width: 100%;
-      height: 100%;
+      width: 100vw;
+      height: 100vh;
       overflow: hidden;
       font-family: 'Hind Siliguri', 'SolaimanLipi', sans-serif;
+      background-color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
-    /* -------------------------------------------------------------
-       YOUR LIVE E-COMMERCE WEBSITE IFRAME (LOADS YOUR APPS SCRIPT URL)
-       ------------------------------------------------------------- */
-    #site-frame {
-      width: 100%;
-      height: 100%;
-      border: none;
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 1; /* Sits underneath the loader screen */
-    }
-
-    /* -------------------------------------------------------------
-       FULLSCREEN ANIMATED LOADER OVERLAY
-       ------------------------------------------------------------- */
+    /* Fullscreen Animated Intro Loader Overlay */
     #bazar-loader-wrapper {
       position: fixed;
       top: 0;
@@ -41,7 +30,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      z-index: 999999; /* Sits on top during animation */
+      z-index: 999999;
       overflow: hidden;
     }
 
@@ -65,7 +54,7 @@
                  disappearCart 0.4s ease-in 3.0s forwards;
     }
 
-    /* Shopping Cart stays strictly in FRONT */
+    /* Shopping Cart Wireframe Placed in Front Layer */
     .shopping-cart {
       font-size: 75px;
       line-height: 1;
@@ -81,7 +70,7 @@
       100% { transform: translateX(0); }
     }
 
-    /* STEP 2: VEGETABLES FALLING INTO CART */
+    /* STEP 2: VEGETABLES FALLING INTO CART BASKET */
     .veg-basket-container {
       position: absolute;
       top: -45px;
@@ -98,7 +87,7 @@
       opacity: 0;
     }
 
-    /* Staggered Drop Sequence for 12 Vegetables */
+    /* Fast-Paced Staggered Drop Sequence for 12 Items */
     .v1  { left: 2px;  animation: dropVegInside 0.30s ease-in 0.8s forwards; }
     .v2  { left: 14px; animation: dropVegInside 0.30s ease-in 0.95s forwards; }
     .v3  { left: 26px; animation: dropVegInside 0.30s ease-in 1.1s forwards; }
@@ -129,17 +118,11 @@
 
     /* STEP 3: CART DISAPPEARS */
     @keyframes disappearCart {
-      0% {
-        opacity: 1;
-        transform: scale(1);
-      }
-      100% {
-        opacity: 0;
-        transform: scale(0.5);
-      }
+      0% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(0.5); }
     }
 
-    /* STEP 3: LOGO & BRAND TITLE ZOOM-IN */
+    /* STEP 3: LOGO & BRAND TITLE ZOOM-IN REVEAL */
     .logo-stage {
       position: absolute;
       opacity: 0;
@@ -163,31 +146,36 @@
     }
 
     @keyframes zoomLogo {
-      0% {
-        opacity: 0;
-        transform: scale(0.2);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1);
-      }
+      0% { opacity: 0; transform: scale(0.2); }
+      100% { opacity: 1; transform: scale(1); }
     }
 
-    /* STEP 4: REVEAL LIVE WEBSITE */
-    .hide-complete-loader {
-      opacity: 0 !important;
-      transition: opacity 0.6s ease-out;
-      pointer-events: none;
+    /* Fallback Click Button styling in case popup blocker pauses auto-redirect */
+    .enter-btn {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 8px 20px;
+      background-color: #007A3D;
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 16px;
+      border-radius: 20px;
+      font-weight: bold;
+      box-shadow: 0px 3px 8px rgba(0,122,61,0.3);
+      transition: background 0.2s;
+    }
+    .enter-btn:hover {
+      background-color: #005a2d;
     }
   </style>
 </head>
 <body>
 
-  <!-- 1. ANIMATED INTRO OVERLAY (DISAPPEARS WHEN ANIMATION FINISHES) -->
+  <!-- ANIMATED INTRO OVERLAY -->
   <div id="bazar-loader-wrapper">
     <div class="bazar-loader-container">
       
-      <!-- Cart & 12 Vegetables Stage -->
+      <!-- Cart & 12 Falling Vegetables Stage -->
       <div id="cart-stage" class="cart-stage">
         <div class="veg-basket-container">
           <span class="veg v1">🥬</span>
@@ -206,39 +194,26 @@
         <div class="shopping-cart">🛒</div>
       </div>
 
-      <!-- BURO Logo & Brand Text Zoom-In -->
+      <!-- BURO Logo & Brand Text Zoom-In with Manual Enter Button Fallback -->
       <div id="logo-stage" class="logo-stage">
         <img src="https://i.ibb.co/V0Zs3nxN/BURO-Logo-R.png" alt="BURO Logo" class="buro-logo-img">
         <h1 class="brand-title">বুরো কৃষি বাজার</h1>
+        <br>
+        <a href="https://script.google.com/macros/s/AKfycbyHF7uOFvpcrRDk2llAgW0IRwkbRQE3hCMyEPJkXA523z9_4sfLXbu5LB37-6o5HlX8/exec" class="enter-btn">বাজারে প্রবেশ করুন 🛒</a>
       </div>
 
     </div>
   </div>
 
-  <!-- 2. YOUR TARGET WEB APP URL (EMBEDDED INSIDE IFRAME) -->
-<iframe
-
-    src="https://script.google.com/macros/s/AKfycbyHF7uOFvpcrRDk2llAgW0IRwkbRQE3hCMyEPJkXA523z9_4sfLXbu5LB37-6o5HlX8/exec"
-
-    height="100%"
-    width="100%"
-    frameBorder="0"
-    loading="eager">
-
-</iframe>
-
   <script>
-    // AUTOMATICALLY HIDE LOADER AFTER ANIMATION CYCLE FINISHES (~4.6 SECONDS)
+    // Target Google Apps Script URL
+    const targetSiteURL = "https://script.google.com/macros/s/AKfycbyHF7uOFvpcrRDk2llAgW0IRwkbRQE3hCMyEPJkXA523z9_4sfLXbu5LB37-6o5HlX8/exec";
+
+    // Automatically navigate to the Apps Script web app right after the animation completes
     window.addEventListener('DOMContentLoaded', function() {
-      const loader = document.getElementById('bazar-loader-wrapper');
-      
       setTimeout(function() {
-        loader.classList.add('hide-complete-loader');
-        setTimeout(function() {
-          loader.style.display = 'none';
-          document.body.style.overflow = 'auto'; // Enable scrolling for main website
-        }, 600);
-      }, 4600);
+        window.location.href = targetSiteURL;
+      }, 4500); // Triggers right after logo zoom finishes
     });
   </script>
 
