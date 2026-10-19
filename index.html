@@ -4,13 +4,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>বুরো কৃষি বাজার</title>
+
+  <!-- Bengali font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Fallback redirect if JavaScript is disabled -->
+  <noscript>
+    <meta http-equiv="refresh" content="1;url=https://script.google.com/macros/s/AKfycbyHF7uOFvpcrRDk2llAgW0IRwkbRQE3hCMyEPJkXA523z9_4sfLXbu5LB37-6o5HlX8/exec">
+  </noscript>
+
   <style>
     /* Global Reset */
     html, body {
       margin: 0;
       padding: 0;
-      width: 100vw;
-      height: 100vh;
+      width: 100%;
+      height: 100%;
       overflow: hidden;
       font-family: 'Hind Siliguri', 'SolaimanLipi', sans-serif;
       background-color: #ffffff;
@@ -21,8 +32,8 @@
       position: fixed;
       top: 0;
       left: 0;
-      width: 100vw;
-      height: 100vh;
+      width: 100%;
+      height: 100%;
       background: #ffffff;
       display: flex;
       justify-content: center;
@@ -145,6 +156,25 @@
       0% { opacity: 0; transform: scale(0.2); }
       100% { opacity: 1; transform: scale(1); }
     }
+
+    /* Manual fallback link (shown only if auto-redirect fails) */
+    #fallback-link {
+      display: none;
+      position: absolute;
+      bottom: 40px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: #007A3D;
+      font-size: 18px;
+      font-weight: 700;
+      text-decoration: underline;
+      z-index: 1000000;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .cart-stage { animation-duration: 0.01s; }
+    }
   </style>
 </head>
 <body>
@@ -152,7 +182,7 @@
   <!-- ANIMATED INTRO OVERLAY -->
   <div id="bazar-loader-wrapper">
     <div class="bazar-loader-container">
-      
+
       <!-- Cart & Vegetables Stage -->
       <div id="cart-stage" class="cart-stage">
         <div class="veg-basket-container">
@@ -179,17 +209,36 @@
       </div>
 
     </div>
+
+    <!-- Manual link if redirect is blocked -->
+    <a id="fallback-link"
+       href="https://script.google.com/macros/s/AKfycbyHF7uOFvpcrRDk2llAgW0IRwkbRQE3hCMyEPJkXA523z9_4sfLXbu5LB37-6o5HlX8/exec"
+       target="_top">
+      সাইট খুলতে এখানে ক্লিক করুন
+    </a>
   </div>
 
   <script>
-    // Direct link to your Google Apps Script Web App
+    // Google Apps Script Web App URL
     const targetSiteURL = "https://script.google.com/macros/s/AKfycbyHF7uOFvpcrRDk2llAgW0IRwkbRQE3hCMyEPJkXA523z9_4sfLXbu5LB37-6o5HlX8/exec";
 
-    // Trigger smooth redirection immediately after animation cycle completes (~4.2 seconds)
-    window.addEventListener('DOMContentLoaded', function() {
-      setTimeout(function() {
+    function goToSite() {
+      try {
+        // Works even when this page is inside an iframe
+        window.top.location.replace(targetSiteURL);
+      } catch (e) {
         window.location.replace(targetSiteURL);
-      }, 4200);
+      }
+    }
+
+    window.addEventListener('load', function () {
+      // Redirect after the animation finishes (~4.2 seconds)
+      setTimeout(goToSite, 4200);
+
+      // If still on this page after 7 seconds, show a manual link
+      setTimeout(function () {
+        document.getElementById('fallback-link').style.display = 'block';
+      }, 7000);
     });
   </script>
 
