@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>বুরো কৃষি বাজার</title>
+  <style>
+    /* Reset Margins & Body Setup */
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Hind Siliguri', 'SolaimanLipi', sans-serif;
+    }
+
+    /* -------------------------------------------------------------
+       YOUR LIVE E-COMMERCE WEBSITE IFRAME (LOADS YOUR APPS SCRIPT URL)
+       ------------------------------------------------------------- */
+    #site-frame {
+      width: 100%;
+      height: 100%;
+      border: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1; /* Sits underneath the loader screen */
+    }
+
+    /* -------------------------------------------------------------
+       FULLSCREEN ANIMATED LOADER OVERLAY
+       ------------------------------------------------------------- */
+    #bazar-loader-wrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999999; /* Sits on top during animation */
+      overflow: hidden;
+    }
+
+    .bazar-loader-container {
+      text-align: center;
+      position: relative;
+      width: 320px;
+      height: 250px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* STEP 1: CART SLIDE FROM RIGHT */
+    .cart-stage {
+      position: relative;
+      width: 90px;
+      height: 90px;
+      transform: translateX(150vw);
+      animation: cartSlideFromRight 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.2s forwards,
+                 disappearCart 0.4s ease-in 3.0s forwards;
+    }
+
+    /* Shopping Cart stays strictly in FRONT */
+    .shopping-cart {
+      font-size: 75px;
+      line-height: 1;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    @keyframes cartSlideFromRight {
+      0% { transform: translateX(150vw); }
+      100% { transform: translateX(0); }
+    }
+
+    /* STEP 2: VEGETABLES FALLING INTO CART */
+    .veg-basket-container {
+      position: absolute;
+      top: -45px;
+      left: 4px;
+      width: 55px;
+      height: 45px;
+      z-index: 5; /* Placed behind cart front wall */
+      pointer-events: none;
+    }
+
+    .veg {
+      position: absolute;
+      font-size: 18px;
+      opacity: 0;
+    }
+
+    /* Staggered Drop Sequence for 12 Vegetables */
+    .v1  { left: 2px;  animation: dropVegInside 0.30s ease-in 0.8s forwards; }
+    .v2  { left: 14px; animation: dropVegInside 0.30s ease-in 0.95s forwards; }
+    .v3  { left: 26px; animation: dropVegInside 0.30s ease-in 1.1s forwards; }
+    .v4  { left: 38px; animation: dropVegInside 0.30s ease-in 1.25s forwards; }
+    .v5  { left: 8px;  animation: dropVegInside 0.30s ease-in 1.4s forwards; }
+    .v6  { left: 20px; animation: dropVegInside 0.30s ease-in 1.55s forwards; }
+    .v7  { left: 32px; animation: dropVegInside 0.30s ease-in 1.7s forwards; }
+    .v8  { left: 4px;  animation: dropVegInside 0.30s ease-in 1.85s forwards; }
+    .v9  { left: 16px; animation: dropVegInside 0.30s ease-in 2.0s forwards; }
+    .v10 { left: 28px; animation: dropVegInside 0.30s ease-in 2.15s forwards; }
+    .v11 { left: 10px; animation: dropVegInside 0.30s ease-in 2.3s forwards; }
+    .v12 { left: 24px; animation: dropVegInside 0.30s ease-in 2.45s forwards; }
+
+    @keyframes dropVegInside {
+      0% {
+        opacity: 0;
+        transform: translateY(-40px) scale(0.5);
+      }
+      70% {
+        opacity: 1;
+        transform: translateY(52px) scale(1.05);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(46px) scale(0.95);
+      }
+    }
+
+    /* STEP 3: CART DISAPPEARS */
+    @keyframes disappearCart {
+      0% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(0.5);
+      }
+    }
+
+    /* STEP 3: LOGO & BRAND TITLE ZOOM-IN */
+    .logo-stage {
+      position: absolute;
+      opacity: 0;
+      transform: scale(0.2);
+      animation: zoomLogo 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.27) 3.3s forwards;
+    }
+
+    .buro-logo-img {
+      height: 95px;
+      width: auto;
+      object-fit: contain;
+      margin-bottom: 12px;
+    }
+
+    .brand-title {
+      color: #007A3D; /* BURO Signature Green */
+      font-size: 32px;
+      font-weight: 700;
+      margin: 0;
+      white-space: nowrap;
+    }
+
+    @keyframes zoomLogo {
+      0% {
+        opacity: 0;
+        transform: scale(0.2);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    /* STEP 4: REVEAL LIVE WEBSITE */
+    .hide-complete-loader {
+      opacity: 0 !important;
+      transition: opacity 0.6s ease-out;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. ANIMATED INTRO OVERLAY (DISAPPEARS WHEN ANIMATION FINISHES) -->
+  <div id="bazar-loader-wrapper">
+    <div class="bazar-loader-container">
+      
+      <!-- Cart & 12 Vegetables Stage -->
+      <div id="cart-stage" class="cart-stage">
+        <div class="veg-basket-container">
+          <span class="veg v1">🥬</span>
+          <span class="veg v2">🥕</span>
+          <span class="veg v3">🥦</span>
+          <span class="veg v4">🍆</span>
+          <span class="veg v5">🍅</span>
+          <span class="veg v6">🌽</span>
+          <span class="veg v7">🍌</span>
+          <span class="veg v8">🫑</span>
+          <span class="veg v9">🥔</span>
+          <span class="veg v10">🥒</span>
+          <span class="veg v11">🧅</span>
+          <span class="veg v12">🧄</span>
+        </div>
+        <div class="shopping-cart">🛒</div>
+      </div>
+
+      <!-- BURO Logo & Brand Text Zoom-In -->
+      <div id="logo-stage" class="logo-stage">
+        <img src="https://i.ibb.co/V0Zs3nxN/BURO-Logo-R.png" alt="BURO Logo" class="buro-logo-img">
+        <h1 class="brand-title">বুরো কৃষি বাজার</h1>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 2. YOUR TARGET WEB APP URL (EMBEDDED INSIDE IFRAME) -->
+  <iframe 
+    id="site-frame" 
+    src="https://script.google.com/macros/s/AKfycbyHF7uOFvpcrRDk2llAgW0IRwkbRQE3hCMyEPJkXA523z9_4sfLXbu5LB37-6o5HlX8/exec">
+  </iframe>
+
+  <script>
+    // AUTOMATICALLY HIDE LOADER AFTER ANIMATION CYCLE FINISHES (~4.6 SECONDS)
+    window.addEventListener('DOMContentLoaded', function() {
+      const loader = document.getElementById('bazar-loader-wrapper');
+      
+      setTimeout(function() {
+        loader.classList.add('hide-complete-loader');
+        setTimeout(function() {
+          loader.style.display = 'none';
+          document.body.style.overflow = 'auto'; // Enable scrolling for main website
+        }, 600);
+      }, 4600);
+    });
+  </script>
+
+</body>
+</html>
