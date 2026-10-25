@@ -1,15 +1,34 @@
 <!DOCTYPE html>
-<html>
+<html lang="bn">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>My App</title>
+  <title>বুরো কৃষি বাজার</title>
   <style>
-    html, body { margin: 0; height: 100%; }
-    iframe { width: 100%; height: 100%; border: none; }
+    html, body { margin: 0; height: 100%; overflow: hidden; }
+    iframe { width: 100%; height: 100%; border: none; display: block; }
   </style>
 </head>
 <body>
-  <iframe src="https://script.google.com/macros/s/AKfycbyHF7uOFvpcrRDk2llAgW0IRwkbRQE3hCMyEPJkXA523z9_4sfLXbu5LB37-6o5HlX8/exec"></iframe>
+  <iframe id="app" allow="clipboard-write; downloads"></iframe>
+
+  <script>
+    var BASE = "https://script.google.com/macros/s/AKfycbyHF7uOFvpcrRDk2llAgW0IRwkbRQE3hCMyEPJkXA523z9_4sfLXbu5LB37-6o5HlX8/exec";
+    var frame = document.getElementById("app");
+
+    function show(page) {
+      frame.src = (page === "admin") ? BASE + "?page=admin" : BASE;
+    }
+
+    // Start with the store page
+    show("store");
+
+    // Listen for "open admin" / "open store" messages from inside the Apps Script pages
+    window.addEventListener("message", function (event) {
+      if (!event.data || !event.data.burroPage) return;
+      if (event.data.burroPage === "admin") show("admin");
+      if (event.data.burroPage === "store") show("store");
+    });
+  </script>
 </body>
 </html>
