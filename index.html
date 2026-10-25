@@ -17,7 +17,13 @@
     var frame = document.getElementById("app");
 
     function show(page) {
-      frame.src = (page === "admin") ? BASE + "?page=admin" : BASE;
+      if (page === "admin") {
+        frame.src = BASE + "?page=admin";
+        document.title = "🛠️ ম্যানেজমেন্ট পোর্টাল";
+      } else {
+        frame.src = BASE;
+        document.title = "বুরো কৃষি বাজার";
+      }
     }
 
     // Start with the store page
@@ -28,6 +34,10 @@
       if (!event.data || !event.data.burroPage) return;
       if (event.data.burroPage === "admin") show("admin");
       if (event.data.burroPage === "store") show("store");
+      if (event.data.burroPage === "openStoreTab") {
+        // new tab with this same site address (no Apps Script URL)
+        window.open(window.location.href.split("#")[0], "_blank");
+      }
     });
   </script>
 </body>
